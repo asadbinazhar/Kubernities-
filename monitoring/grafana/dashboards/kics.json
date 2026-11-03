@@ -1,0 +1,173 @@
+{
+  "id": null,
+  "uid": "kics-cloud-native",
+  "title": "KICS | Kubernetes Deployment Lab",
+  "tags": [
+    "KICS",
+    "HCCDA",
+    "Kubernetes"
+  ],
+  "schemaVersion": 39,
+  "version": 1,
+  "refresh": "10s",
+  "timezone": "browser",
+  "time": {
+    "from": "now-30m",
+    "to": "now"
+  },
+  "panels": [
+    {
+      "id": 1,
+      "title": "Kubernetes Cluster Connected",
+      "type": "stat",
+      "gridPos": {
+        "h": 6,
+        "w": 6,
+        "x": 0,
+        "y": 0
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "kics-prometheus"
+      },
+      "targets": [
+        {
+          "expr": "kics_lab_cluster_connected",
+          "legendFormat": "Connection"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "min": 0,
+          "max": 1,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "green",
+                "value": 1
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": 2,
+      "title": "Ready Pods",
+      "type": "stat",
+      "gridPos": {
+        "h": 6,
+        "w": 6,
+        "x": 6,
+        "y": 0
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "kics-prometheus"
+      },
+      "targets": [
+        {
+          "expr": "kics_lab_ready_pods",
+          "legendFormat": "Ready"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "title": "Green Traffic Target (%)",
+      "type": "gauge",
+      "gridPos": {
+        "h": 6,
+        "w": 6,
+        "x": 12,
+        "y": 0
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "kics-prometheus"
+      },
+      "targets": [
+        {
+          "expr": "kics_lab_green_traffic_weight_percent",
+          "legendFormat": "Green"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percent",
+          "min": 0,
+          "max": 100
+        }
+      }
+    },
+    {
+      "id": 4,
+      "title": "Total Kubernetes Pods",
+      "type": "stat",
+      "gridPos": {
+        "h": 6,
+        "w": 6,
+        "x": 18,
+        "y": 0
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "kics-prometheus"
+      },
+      "targets": [
+        {
+          "expr": "kics_lab_total_pods",
+          "legendFormat": "Total"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "title": "Blue vs Green Observed HTTP Requests",
+      "type": "timeseries",
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 6
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "kics-prometheus"
+      },
+      "targets": [
+        {
+          "expr": "sum by (track) (rate(kics_lab_demo_requests_total{outcome=\"ok\"}[2m]))",
+          "legendFormat": "{{track}}"
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "title": "Classroom Operations",
+      "type": "timeseries",
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 6
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "kics-prometheus"
+      },
+      "targets": [
+        {
+          "expr": "sum by (action, result) (increase(kics_lab_operations_total[5m]))",
+          "legendFormat": "{{action}} / {{result}}"
+        }
+      ]
+    }
+  ]
+}

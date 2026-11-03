@@ -1,0 +1,35 @@
+# Reference-only learning manifest; GUI already creates the classroom workloads.
+# This example illustrates Blue-Green service selectors, not the actual traffic router.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: blue-example
+  namespace: kics-lab
+spec:
+  replicas: 1
+  selector:
+    matchLabels: {app: color-example, slot: blue}
+  template:
+    metadata:
+      labels: {app: color-example, slot: blue}
+    spec:
+      containers:
+        - name: nginx
+          image: nginx:1.29-alpine
+          ports: [{containerPort: 80}]
+          readinessProbe:
+            tcpSocket: {port: 80}
+            initialDelaySeconds: 3
+            periodSeconds: 5
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: color-example
+  namespace: kics-lab
+spec:
+  selector: {app: color-example, slot: blue}
+  ports: [{port: 80, targetPort: 80}]
+# To switch traffic in a selector-based Blue-Green approach:
+# kubectl patch svc color-example -n kics-lab -p '{"spec":{"selector":{"app":"color-example","slot":"green"}}}'
+# Our actual GUI uses Nginx weighted routing so it can also demonstrate a canary split.

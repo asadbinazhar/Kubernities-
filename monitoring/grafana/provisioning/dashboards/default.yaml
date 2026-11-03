@@ -1,0 +1,10 @@
+apiVersion: 1
+providers:
+  - name: KICS Kubernetes Lab
+    orgId: 1
+    folder: KICS HCCDA
+    type: file
+    disableDeletion: true
+    editable: false
+    options:
+      path: /var/lib/grafana/dashboards
